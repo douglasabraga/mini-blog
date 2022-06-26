@@ -2,46 +2,39 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styles from './Navbar.module.css'
 
+import { useAuthentication } from '../hooks/useAuthentication'
+
+import { useAuthValue } from '../context/AuthContext'
+import NavbarLink from './NavbarLink'
+
 const Navbar = () => {
+
+    const { user } = useAuthValue()
+
     return (
         <nav className={styles.navbar}>
-            <NavLink to='/' className={styles.brand}>
+            <NavbarLink isBrend={true}>
                 Mini <span>Blog</span>
-            </NavLink>
+            </NavbarLink>
             <ul className={styles.links_list}>
-                <li>
-                    <NavLink
-                        to='/'
-                        className={
-                            ({ isActive }) => (isActive ? styles.active : '')
-                        }
-                    >Home
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink
-                        to='/about'
-                        className={
-                            ({ isActive }) => (isActive ? styles.active : '')
-                        }
-                    >Sobre</NavLink>
-                </li>
-                <li>
-                    <NavLink
-                        to='/login'
-                        className={
-                            ({ isActive }) => (isActive ? styles.active : '')
-                        }
-                    >Entrar</NavLink>
-                </li>
-                <li>
-                    <NavLink
-                        to='/register'
-                        className={
-                            ({ isActive }) => (isActive ? styles.active : '')
-                        }
-                    >Registrar</NavLink>
-                </li>
+                <NavbarLink>
+                    Home
+                </NavbarLink>
+                <NavbarLink to='/about'>
+                    Sobre
+                </NavbarLink>
+                {
+                    user ?
+                        <>
+                            <NavbarLink to='/posts/create'>Novo post</NavbarLink>
+                            <NavbarLink to='/dashboard'>Dashboard</NavbarLink>
+                        </>
+                        :
+                        <>
+                            <NavbarLink to='/login'>Entrar</NavbarLink>
+                            <NavbarLink to='/register'>Registrar</NavbarLink>
+                        </>
+                }
             </ul>
         </nav>
     )
